@@ -30,4 +30,4 @@ jobs:
     - name: Run
       run: out/DDB
       env:
-        KEY: ${{ secrets.KVKEY }}
+        KVKEY: ${{ secrets.KVKEY }}
