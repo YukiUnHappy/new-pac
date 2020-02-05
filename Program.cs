@@ -18,7 +18,7 @@ namespace DDB
         private static WebClient _wc;
         private static HttpClient _client;
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var l = new List<string>
             {
@@ -124,7 +124,7 @@ namespace DDB
             Console.WriteLine("Finish");
         }
 
-        private static Regex regex = new Regex("\"files\":\\[{\"name\":\"(.+?)\",\"url\":\"(.+?)\"");
+        private static readonly Regex regex = new Regex("\"files\":\\[{\"name\":\"(.+?)\",\"url\":\"(.+?)\"");
 
         private static string Upload(string path)
         {
@@ -140,9 +140,7 @@ namespace DDB
 
             // ensure the request was a success
             if (!response.IsSuccessStatusCode)
-            {
                 return Upload(path);
-            }
 
             var result = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
@@ -154,8 +152,8 @@ namespace DDB
             return name;
         }
 
-        private static string cKey = Environment.GetEnvironmentVariable("KEY") ?? "tcb";
-        private const string kv = "https://keyvalue.immanuel.co/api/KeyVal/COM/nk4z9vqp";
+        private static readonly string CKey = Environment.GetEnvironmentVariable("KVKEY") ?? "tcb";
+        private const string Kv = "https://keyvalue.immanuel.co/api/KeyVal/COM/nk4z9vqp";
 
         private static void UploadCache()
         {
@@ -163,13 +161,13 @@ namespace DDB
 
             var name = Upload("tmp.zip");
 
-            _client.PostAsync($"{kv.Replace("COM", "UpdateValue")}/{cKey}/{Path.GetFileNameWithoutExtension(name)}",
+            _client.PostAsync($"{Kv.Replace("COM", "UpdateValue")}/{CKey}/{Path.GetFileNameWithoutExtension(name)}",
                 null).GetAwaiter().GetResult();
         }
 
         private static void DownloadCache()
         {
-            var k = _client.GetAsync($"{kv.Replace("COM", "GetValue")}/{cKey}").GetAwaiter().GetResult().Content
+            var k = _client.GetAsync($"{Kv.Replace("COM", "GetValue")}/{CKey}").GetAwaiter().GetResult().Content
                 .ReadAsStringAsync().GetAwaiter().GetResult()[1..^1];
 
             if (string.IsNullOrEmpty(k))
