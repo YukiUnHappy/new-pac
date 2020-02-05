@@ -109,7 +109,7 @@ namespace DDB
                         batchWrite.AddDocumentToPut(doc);
                     }
 
-                    //batchWrite.ExecuteAsync().GetAwaiter().GetResult();
+                    batchWrite.ExecuteAsync().GetAwaiter().GetResult();
                 }
 
                 if (dic.Count != 0)
@@ -119,7 +119,7 @@ namespace DDB
                 Console.WriteLine($"{list.Count}/{dic.Count}");
             }
 
-            //UploadCache();
+            UploadCache();
 
             Console.WriteLine("Finish");
         }
