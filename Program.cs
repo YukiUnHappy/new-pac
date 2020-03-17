@@ -170,7 +170,7 @@ namespace DDB
             var k = _client.GetAsync($"{Kv.Replace("COM", "GetValue")}/{CKey}").GetAwaiter().GetResult().Content
                 .ReadAsStringAsync().GetAwaiter().GetResult()[1..^1];
 
-            if (string.IsNullOrEmpty(k))
+            if (string.IsNullOrWhiteSpace(k) || k == "n")
                 return;
 
             var f = $"https://i.fiery.me/{k}.zip";
